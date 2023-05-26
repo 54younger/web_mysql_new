@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Post Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('user') }}">Users</a></li>
+        <li><a href="{{ url_for('post') }}">Posts</a></li>
+        <li><a href="{{ url_for('comment') }}">Comments</a></li>
+        <li><a href="{{ url_for('topic') }}">Topics</a></li>
+      </ul>
+    </nav>
+    <h1>Post Page</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Post ID</th>
+          <th>Title</th>
+          <th>Content</th>
+          <th>Topic ID</th>
+          <th>User ID</th>
+          <th>Created At</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td>{{ post['post_id'] }}</td>
+          <td>{{ post['title'] }}</td>
+          <td>{{ post['content'] }}</td>
+          <td>{{ post['topic_id'] }}</td>
+          <td>{{ post['user_id'] }}</td>
+          <td>{{ post['created_at'] }}</td>
+          <td><a href="{{ url_for('delete_post', post_id=post['post_id']) }}">删除</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <h2>CreatePost</h2>
+    <form action="/CreatePost" method="POST">
+      <input type="text" name="title" placeholder="title" /><br />
+      <input type="text" name="content" placeholder="content" /><br />
+      <input type="text" name="topic_id" placeholder="topic_id" /><br />
+      <input type="text" name="user_id" placeholder="user_id" /><br />
+      <input type="submit" value="Update" />
+    </form>
+
+    <h2>UpdatePost</h2>
+    <form action="/UpdatePost" method="POST">
+      <input type="text" name="post_id" placeholder="post_id" /><br />
+      <input type="text" name="content" placeholder="content" /><br />
+      <input type="submit" value="Insert" />
+    </form>
+
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

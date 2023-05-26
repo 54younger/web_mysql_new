@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Comment Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('user') }}">Users</a></li>
+        <li><a href="{{ url_for('post') }}">Posts</a></li>
+        <li><a href="{{ url_for('comment') }}">Comments</a></li>
+        <li><a href="{{ url_for('topic') }}">Topics</a></li>
+      </ul>
+    </nav>
+    <h1>Comment Page</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Comment ID</th>
+          <th>Content</th>
+          <th>User ID</th>
+          <th>Post ID</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for comment in comments %}
+        <tr>
+          <td>{{ comment['comment_id'] }}</td>
+          <td>{{ comment['content'] }}</td>
+          <td>{{ comment['user_id'] }}</td>
+          <td>{{ comment['post_id'] }}</td>
+          <td>{{ comment['created_at'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

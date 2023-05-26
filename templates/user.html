@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('user') }}">Users</a></li>
+        <li><a href="{{ url_for('post') }}">Posts</a></li>
+        <li><a href="{{ url_for('comment') }}">Comments</a></li>
+        <li><a href="{{ url_for('topic') }}">Topics</a></li>
+      </ul>
+    </nav>
+    <h1>User Page</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{ user['user_id'] }}</td>
+          <td>{{ user['username'] }}</td>
+          <td>{{ user['email'] }}</td>
+          <td>{{ user['created_at'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

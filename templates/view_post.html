@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block content %}
+<div class="post">
+  <h2>{{ post.title }}</h2>
+  <p>{{ post.content }}</p>
+  <p class="text-muted">{{ post.created_at }}</p>
+</div>
+
+<hr />
+
+<h3>Comments</h3>
+{% if comments %} {% for comment in comments %}
+<div class="comment">
+  <p>{{ comment.content }}</p>
+  <p class="text-muted">{{ comment.created_at }}</p>
+</div>
+{% endfor %} {% else %}
+<p>No comments yet!</p>
+{% endif %}
+
+<hr />
+{% endblock %}

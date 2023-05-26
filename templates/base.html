@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}WCY's Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('user') }}">Users</a></li>
+        <li><a href="{{ url_for('post') }}">Posts</a></li>
+        <li><a href="{{ url_for('comment') }}">Comments</a></li>
+        <li><a href="{{ url_for('topic') }}">Topics</a></li>
+      </ul>
+    </nav>
+    <h2>Add User</h2>
+    <form action="/add_user" method="POST">
+      <input type="text" name="username" placeholder="username" /><br />
+      <input type="text" name="email" placeholder="email" /><br />
+      <input type="password" name="password" placeholder="password" /><br />
+      <input type="submit" value="Insert" />
+
+
+    </form>
+    <h2>rename Username</h2>
+    <form action="/rename_username" method="POST">
+      <input type="text" name="user_id" placeholder="user_id" /><br />
+      <input type="text" name="newname" placeholder="newname" /><br />
+      <input type="submit" value="rename" />
+
+
+    </form>
+    <h2>del_post</h2>
+    <form action="/del_post" method="POST">
+      <input type="text" name="post_id" placeholder="post_id" /><br />
+      <input type="submit" value="delete" />
+
+
+    </form>
+    <h2>view_post</h2>
+    <form action="/view_post" method="POST">
+      <input type="text" name="post_id" placeholder="post_id" /><br />
+      <input type="submit" value="view" />
+    </form>
+    <main>{% block content %}{% endblock %}</main>
+    <footer>&copy; 20221020 王晨阳</footer>
+  </body>
+</html>

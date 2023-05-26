@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Topic Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('user') }}">Users</a></li>
+        <li><a href="{{ url_for('post') }}">Posts</a></li>
+        <li><a href="{{ url_for('comment') }}">Comments</a></li>
+        <li><a href="{{ url_for('topic') }}">Topics</a></li>
+      </ul>
+    </nav>
+    <h1>Topic Page</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Topic ID</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for topic in topics %}
+        <tr>
+          <td>{{ topic['topic_id'] }}</td>
+          <td><a href="{{ url_for('GetPostsByTopic', topic_id=topic['topic_id']) }}">{{ topic['name'] }}</a></td>
+          <td>{{ topic['description'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>
