@@ -1,0 +1,84 @@
+Operation: Insert
+Details: Insert 1 rows of data
+Elapsed time: 0.002998 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 1
+Elapsed time: 0.002001 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 1
+Elapsed time: 0.000998 seconds
+------------------------------
+Operation: Insert
+Details: Insert 10 rows of data
+Elapsed time: 0.015000 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 2
+Elapsed time: 0.001001 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 2
+Elapsed time: 0.001000 seconds
+------------------------------
+Operation: Insert
+Details: Insert 100 rows of data
+Elapsed time: 0.134538 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 3
+Elapsed time: 0.005000 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 3
+Elapsed time: 0.005000 seconds
+------------------------------
+Operation: Insert
+Details: Insert 1000 rows of data
+Elapsed time: 1.292999 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 1
+Elapsed time: 0.037000 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 1
+Elapsed time: 0.038013 seconds
+------------------------------
+Operation: Insert
+Details: Insert 10000 rows of data
+Elapsed time: 11.899002 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 2
+Elapsed time: 0.382998 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 2
+Elapsed time: 0.376001 seconds
+------------------------------
+Operation: Insert
+Details: Insert 100000 rows of data
+Elapsed time: 119.871752 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 3
+Elapsed time: 3.846000 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 3
+Elapsed time: 3.839999 seconds
+------------------------------
+Operation: Insert
+Details: Insert 1000000 rows of data
+Elapsed time: 1229.402234 seconds
+------------------------------
+Operation: Query with index
+Details: Query data with user_id = 1
+Elapsed time: 63.715263 seconds
+------------------------------
+Operation: Query without index
+Details: Query data with user_id = 1
+Elapsed time: 38.344996 seconds
+------------------------------

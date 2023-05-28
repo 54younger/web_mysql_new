@@ -1,12 +1,10 @@
-from cProfile import run
+# index_test.py
 import time
-from flask import Flask, render_template, request, redirect, url_for
 import pymysql
+import matplotlib.pyplot as plt
 from poprogress import simple_progress
 
-app = Flask(__name__)
-
-# Database configuration
+# 连接数据库
 db = pymysql.connect(host='127.0.0.1',
                      user='root',
                      password='20021110wcy',
@@ -14,47 +12,33 @@ db = pymysql.connect(host='127.0.0.1',
                      charset='utf8mb4',
                      cursorclass=pymysql.cursors.DictCursor)
 
-total_elapsed_time = 0.0
+# 创建游标对象
+cursor = db.cursor()
 
-# 数据查询
-def data_query(user_id):
-    global total_elapsed_time
-    # 执行查询语句
-    cursor = db.cursor()
-    query = "SELECT * FROM post WHERE user_id = %s"
-    cursor.execute(query, (user_id,))
-    result = cursor.fetchall()
-    '''
-    # 记录操作详情和耗时
-    elapsed_time = time.time() - start_time
-    total_elapsed_time += elapsed_time
+search_times_with_index = [] # 记录查询时间（有索引）
+search_times_without_index = [] # 记录查询时间（无索引）
+insert_times = [] # 记录插入时间
 
-    operation = f"Data query: user_id={user_id}"
-    details = f"Result: {result}"
-    write_to_file(operation, details, elapsed_time)
-    '''
-    return result
 
-# 数据插入
-def data_insert(title, content, topic_id, user_id):
-
-    global total_elapsed_time
-    # 执行插入语句
-    cursor = db.cursor()
-    query = "INSERT INTO post (title, content, topic_id, user_id) VALUES (%s, %s, %s, %s)"
-    cursor.execute(query, (title, content, topic_id, user_id))
+def data_insert(times):
+    # 插入数据
+    for i in simple_progress(range(times,10*times)):
+        topic_id = (i+1)%3+1
+        user_id = (i+1)%3+1
+        title = f"Title {i+1}"
+        content = f"Content {i+1}"
+        sql = f"INSERT INTO post (title, content, topic_id, user_id) VALUES ('{title}', '{content}',{topic_id}, {user_id})"
+        cursor.execute(sql)
     db.commit()
 
-    '''
-    # 记录操作详情和耗时
-    elapsed_time = time.time() - start_time
-    total_elapsed_time += elapsed_time
 
-    operation = f"Data insert: title={title}, content={content}, topic_id={topic_id}, user_id={user_id}"
-    details = "Insertion successful"
+def data_query_time(user_id):
+    start_time = time.time()
+    sql = f"SELECT * FROM post WHERE user_id = {user_id}"
+    cursor.execute(sql)
+    search_time = time.time() - start_time
+    return search_time
 
-    write_to_file(operation, details, elapsed_time)
-    '''
 # 将操作详情、结果和耗时写入文件
 def write_to_file(operation, details, elapsed_time):
     with open("index_time.txt", "a") as file:
@@ -64,50 +48,43 @@ def write_to_file(operation, details, elapsed_time):
         file.write("------------------------------\n")
 
 
-# 进行1000000次不同的数据插入
-start_time=time.time()
+# 删除外键约束
+cursor.execute("ALTER TABLE post DROP FOREIGN KEY post_ibfk_1")
 
-for i in simple_progress(range(1000000)):
-    title = f"Title {i+1}"
-    content = f"Content {i+1}"
-    topic_id = (i+1)%3+1
-    user_id = (i+1)%3+1
-    data_insert(title, content, topic_id, user_id)
+#记录不同数量级的数据的时间
+for i in simple_progress(range(7)):
+    times=10**i
+    user_id = (i % 3) + 1
+    
+    insert_start_time = time.time()
+    data_insert(times)
+    insert_times.append(time.time() - insert_start_time)
 
-total_elapsed_time=time.time()
-insert_time=total_elapsed_time-start_time
-operation = "insert time"
-details = f"Total: {insert_time:.6f} seconds"
-write_to_file(operation, details, insert_time)
+    cursor.execute("ALTER TABLE post ADD INDEX (user_id)")
+    # 测试查询时间（有索引）
+    search_times_with_index.append(data_query_time(user_id))
 
-start_time=time.time()
-# 进行(无索引)数据查询
-for i in range(1):
-    user_id = (i+1)%3+1
-    data_query(user_id)
+    cursor.execute("ALTER TABLE post DROP INDEX user_id")
+    # 测试查询时间（无索引）
+    search_times_without_index.append(data_query_time(user_id))
 
-total_elapsed_time=time.time()
-
-search_time=total_elapsed_time-start_time
-operation = "serach time(without index)"
-details = f"Total: {search_time:.6f} seconds"
-write_to_file(operation, details, search_time)
+    # 将操作详情、结果和耗时写入文件
+    write_to_file("Insert", f"Insert {times} rows of data", insert_times[i])
+    write_to_file("Query with index", f"Query data with user_id = {user_id}", search_times_with_index[i])
+    write_to_file("Query without index", f"Query data with user_id = {user_id}", search_times_without_index[i])
 
 
-#针对user_id创建索引
-cursor = db.cursor()
-cursor.execute('ALTER TABLE post ADD INDEX (post_id)')
-db.commit()
 
-start_time=time.time()
-# 进行(有索引)数据查询
-for i in range(1):
-    user_id = (i+1)%3+1
-    data_query(user_id)
+# 绘制折线图
+plt.plot(insert_times, label="Insert")
+plt.plot(search_times_with_index, label="Query with index")
+plt.plot(search_times_without_index, label="Query without index")
+plt.xlabel("Number of data")
+plt.ylabel("Time (seconds)")
+plt.legend()
+plt.show()
+# 将折线图保存为图片
+plt.savefig("index_time.png")
 
-total_elapsed_time=time.time()
-
-search_time_index=total_elapsed_time-start_time
-operation = "serach time(with index)"
-details = f"Total: {search_time_index:.6f} seconds"
-write_to_file(operation, details, search_time_index)
+# 关闭数据库连接
+db.close()
