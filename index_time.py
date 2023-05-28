@@ -55,7 +55,7 @@ cursor.execute("ALTER TABLE post DROP FOREIGN KEY post_ibfk_1")
 for i in simple_progress(range(7)):
     times=10**i
     user_id = (i % 3) + 1
-    
+
     insert_start_time = time.time()
     data_insert(times)
     insert_times.append(time.time() - insert_start_time)
@@ -76,7 +76,6 @@ for i in simple_progress(range(7)):
 
 
 # 绘制折线图
-plt.plot(insert_times, label="Insert")
 plt.plot(search_times_with_index, label="Query with index")
 plt.plot(search_times_without_index, label="Query without index")
 plt.xlabel("Number of data")
