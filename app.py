@@ -2,11 +2,22 @@ from flask import Flask, render_template, request, redirect, url_for
 import pymysql
 
 app = Flask(__name__)
+sql_user = ''
+sql_password = ''
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    global sql_user
+    global sql_password
+    if request.method == 'POST':
+        sql_user = request.form['user']
+        sql_password = request.form['password']
+    return render_template('index.html')
 
 # Database configuration
 db = pymysql.connect(host='127.0.0.1',
-                     user='root',
-                     password='20021110wcy',
+                     user=sql_user,
+                     password=sql_password,
                      db='test_temp',
                      charset='utf8mb4',
                      cursorclass=pymysql.cursors.DictCursor)
@@ -16,7 +27,10 @@ db = pymysql.connect(host='127.0.0.1',
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if sql_user == '' and sql_password == '':
+        return redirect(url_for('login'))
+    else:
+        return render_template('index.html')
 
 # User page
 
